@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Untuk Tata — dari Reza</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #F5EFE0;
+    --ink: #1A1208;
+    --terracotta: #C9553A;
+    --gold: #D4A843;
+    --sage: #6B8C6E;
+    --blush: #E8B4A0;
+    --deep: #2C1F0E;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--terracotta);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--terracotta);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.18s ease;
+    opacity: 0.5;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 4rem 6rem 6rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s ease forwards;
+  }
+
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 9vw, 9rem);
+    line-height: 0.9;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s ease forwards;
+  }
+  .hero-name span {
+    color: var(--terracotta);
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--blush);
+    line-height: 1.6;
+    max-width: 28ch;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s ease forwards;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 3rem;
+    left: 6rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.2s ease forwards;
+  }
+  .hero-scroll span {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(245,239,224,0.4);
+  }
+  .scroll-line {
+    width: 60px;
+    height: 1px;
+    background: var(--terracotta);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--cream);
+    animation: scanLine 2s 1.5s infinite ease;
+  }
+
+  .hero-right {
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Abstract art shapes in hero right */
+  .art-canvas {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: fadeIn 1s 0.9s ease forwards;
+  }
+
+  .geo-circle-lg {
+    position: absolute;
+    width: 380px; height: 380px;
+    border-radius: 50%;
+    border: 1.5px solid var(--terracotta);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotateSlow 30s linear infinite;
+  }
+  .geo-circle-sm {
+    position: absolute;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0.18;
+    top: 18%; right: 12%;
+  }
+  .geo-rect {
+    position: absolute;
+    width: 120px; height: 200px;
+    background: var(--terracotta);
+    opacity: 0.12;
+    bottom: 15%; left: 10%;
+    transform: rotate(-18deg);
+  }
+  .geo-triangle {
+    position: absolute;
+    width: 0; height: 0;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+    border-bottom: 120px solid var(--sage);
+    opacity: 0.25;
+    top: 12%; left: 20%;
+  }
+  .geo-dot-grid {
+    position: absolute;
+    bottom: 10%; right: 8%;
+    display: grid;
+    grid-template-columns: repeat(6, 10px);
+    gap: 8px;
+  }
+  .geo-dot-grid span {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--ink);
+    opacity: 0.2;
+    display: block;
+  }
+
+  .hero-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22rem;
+    color: var(--terracotta);
+    opacity: 0.06;
+    position: absolute;
+    bottom: -2rem;
+    right: -1rem;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .hero-center-text {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+  .hero-center-text p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink);
+    opacity: 0.5;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeIn 1s 1s ease forwards;
+  }
+  .hero-center-text h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--terracotta);
+    letter-spacing: 0.1em;
+    opacity: 0;
+    animation: fadeIn 1s 1.2s ease forwards;
+  }
+
+  /* ─── SECTION BASE ─── */
+  section {
+    padding: 8rem 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: currentColor;
+  }
+
+  /* ─── SECTION 1: SEMANGAT ─── */
+  .s-semangat {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .s-semangat .section-label { color: var(--gold); }
+
+  .semangat-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .semangat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    color: var(--terracotta);
+    margin-bottom: 1rem;
+  }
+
+  .semangat-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 6vw, 6rem);
+    line-height: 0.9;
+    color: var(--cream);
+    margin-bottom: 2rem;
+  }
+  .semangat-heading em {
+    color: var(--terracotta);
+    font-style: normal;
+    display: block;
+  }
+
+  .semangat-body {
+    color: rgba(245,239,224,0.75);
+    font-size: 1rem;
+    line-height: 1.9;
+    margin-bottom: 2rem;
+  }
+
+  .semangat-right {
+    padding-top: 6rem;
+    position: relative;
+  }
+
+  .quote-block {
+    border-left: 3px solid var(--terracotta);
+    padding: 1.5rem 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  .quote-block::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    color: var(--terracotta);
+    opacity: 0.15;
+    position: absolute;
+    top: -2rem;
+    left: 1rem;
+    line-height: 1;
+  }
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--cream);
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+
+  .art-stripe {
+    position: absolute;
+    top: 0; right: -6rem;
+    width: 3px;
+    height: 100%;
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--terracotta) 0px,
+      var(--terracotta) 20px,
+      transparent 20px,
+      transparent 35px
+    );
+    opacity: 0.3;
+  }
+
+  /* ─── SECTION 2: TERIMA KASIH ─── */
+  .s-thanks {
+    background: var(--cream);
+    color: var(--ink);
+  }
+  .s-thanks .section-label { color: var(--terracotta); }
+
+  .thanks-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    margin-bottom: 5rem;
+    gap: 4rem;
+  }
+
+  .thanks-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 7vw, 7rem);
+    line-height: 0.9;
+    color: var(--ink);
+  }
+  .thanks-heading em {
+    color: var(--terracotta);
+    font-style: normal;
+  }
+
+  .thanks-intro {
+    max-width: 28ch;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: rgba(26,18,8,0.6);
+    line-height: 1.7;
+    text-align: right;
+  }
+
+  .thanks-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+
+  .thanks-card {
+    background: var(--cream);
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease;
+  }
+  .thanks-card:hover { background: var(--terracotta); }
+  .thanks-card:hover .tc-num,
+  .thanks-card:hover .tc-title,
+  .thanks-card:hover .tc-body { color: var(--cream); }
+
+  .tc-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--terracotta);
+    opacity: 0.15;
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    transition: color 0.3s, opacity 0.3s;
+  }
+  .thanks-card:hover .tc-num { opacity: 0.2; }
+
+  .tc-icon {
+    width: 36px; height: 36px;
+    margin-bottom: 1.5rem;
+  }
+  .tc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--ink);
+    transition: color 0.3s;
+  }
+  .tc-body {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: rgba(26,18,8,0.65);
+    transition: color 0.3s;
+  }
+
+  /* ─── SECTION 3: DUKUNGAN ─── */
+  .s-support {
+    background: var(--terracotta);
+    color: var(--cream);
+    padding: 8rem 6rem;
+  }
+
+  .support-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 8rem;
+    align-items: center;
+  }
+
+  .support-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .support-eyebrow::after {
+    content: '';
+    width: 40px; height: 1px;
+    background: var(--gold);
+  }
+
+  .support-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 6vw, 6rem);
+    line-height: 0.9;
+    color: var(--cream);
+    margin-bottom: 2.5rem;
+  }
+  .support-heading span {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.55em;
+    display: block;
+    color: rgba(245,239,224,0.7);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3em;
+  }
+
+  .support-body {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: rgba(245,239,224,0.85);
+    margin-bottom: 3rem;
+  }
+
+  .support-promise {
+    background: rgba(245,239,224,0.12);
+    border: 1.5px solid rgba(245,239,224,0.2);
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .support-promise p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--cream);
+    line-height: 1.7;
+  }
+
+  .support-right {
+    position: relative;
+  }
+
+  .art-circle-stack {
+    position: relative;
+    width: 320px; height: 320px;
+    margin: 0 auto;
+  }
+  .acs-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid rgba(245,239,224,0.3);
+  }
+  .acs-ring:nth-child(1) { inset: 0; animation: rotateSlow 20s linear infinite; }
+  .acs-ring:nth-child(2) { inset: 30px; animation: rotateSlow 15s linear infinite reverse; }
+  .acs-ring:nth-child(3) { inset: 60px; border-color: rgba(245,239,224,0.5); }
+  .acs-center {
+    position: absolute;
+    inset: 90px;
+    border-radius: 50%;
+    background: rgba(245,239,224,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+  .acs-center p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.8rem;
+    color: var(--cream);
+    line-height: 1.5;
+  }
+  .acs-center strong {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    background: var(--deep);
+    padding: 6rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 4rem;
+  }
+
+  .footer-msg {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    line-height: 1;
+    color: var(--cream);
+  }
+  .footer-msg span { color: var(--terracotta); }
+
+  .footer-right {
+    text-align: right;
+  }
+  .footer-from {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(245,239,224,0.35);
+    margin-bottom: 0.5rem;
+  }
+  .footer-name {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.8rem;
+    color: var(--gold);
+  }
+
+  .footer-art {
+    grid-column: 1 / -1;
+    border-top: 1px solid rgba(245,239,224,0.08);
+    padding-top: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-art p {
+    font-size: 0.8rem;
+    color: rgba(245,239,224,0.2);
+    letter-spacing: 0.1em;
+  }
+  .footer-dots {
+    display: flex;
+    gap: 8px;
+  }
+  .footer-dots span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+  .footer-dots span:nth-child(1) { background: var(--terracotta); }
+  .footer-dots span:nth-child(2) { background: var(--gold); opacity: 0.5; }
+  .footer-dots span:nth-child(3) { background: var(--sage); opacity: 0.3; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes rotateSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes scanLine {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+
+  /* scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 5rem 2.5rem; }
+    section { padding: 5rem 2.5rem; }
+    .semangat-layout, .support-layout, .thanks-header { grid-template-columns: 1fr; gap: 3rem; }
+    .thanks-cards { grid-template-columns: 1fr; }
+    .semangat-right { padding-top: 0; }
+    .footer { grid-template-columns: 1fr; padding: 4rem 2.5rem; }
+    .footer-right { text-align: left; }
+    .art-stripe { display: none; }
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- HERO -->
+<section class="hero" style="padding: 0;">
+  <div class="hero-left">
+    <p class="hero-tag">Sebuah pesan untukmu</p>
+    <h1 class="hero-name">
+      Okta<span>viani</span>
+    </h1>
+    <p class="hero-subtitle">Baca ini pelan-pelan, ya, Tata. Setiap kata ditulis dengan sepenuh hati.</p>
+    <div class="hero-scroll">
+      <span>Scroll untuk membaca</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="art-canvas">
+      <div class="geo-circle-lg"></div>
+      <div class="geo-circle-sm"></div>
+      <div class="geo-rect"></div>
+      <div class="geo-triangle"></div>
+      <div class="geo-dot-grid">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="hero-number">01</div>
+    </div>
+    <div class="hero-center-text">
+      <p>untuk</p>
+      <h2>Tata ♡</h2>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1: SEMANGAT -->
+<section class="s-semangat">
+  <div class="semangat-layout">
+    <div>
+      <p class="semangat-number reveal">01 — Semangat</p>
+      <p class="section-label reveal reveal-delay-1">Untuk Jiwa yang Kuat</p>
+      <h2 class="semangat-heading reveal reveal-delay-1">
+        Kamu Boleh <em>Lelah,</em> Tapi Jangan Berhenti
+      </h2>
+      <p class="semangat-body reveal reveal-delay-2">
+        Akhir-akhir ini pasti terasa berat banget, Tata. Kehidupan mahasiswa, tugas yang tak ada habisnya, ditambah rasa capek yang menumpuk hari demi hari. Tapi ingat — Allah tidak pernah salah dalam menimbang beban untuk hamba-hamba-Nya. Setiap cobaan yang datang, datang dalam ukuran yang pas untukmu.
+      </p>
+      <p class="semangat-body reveal reveal-delay-2">
+        Kamu sudah melewati banyak hal sulit sebelum ini, dan kamu masih di sini, masih berdiri. Itu bukan kebetulan. Itu bukti nyata betapa tangguhnya kamu, bahkan di saat kamu sendiri tidak menyadarinya.
+      </p>
+      <p class="semangat-body reveal reveal-delay-3">
+        Percaya, berdoa, berusaha — tiga hal itu cukup. Kamu tidak harus sempurna, Tata. Kamu hanya perlu terus melangkah, satu hari dalam satu waktu.
+      </p>
+    </div>
+    <div class="semangat-right">
+      <div class="art-stripe"></div>
+      <div class="quote-block reveal">
+        <p class="quote-text">
+          "Kamu perempuan yang kuat, yang tangguh dalam menghadapi semua hal. Dan kekuatan itu nyata — terlihat dalam setiap langkahmu."
+        </p>
+      </div>
+      <div class="quote-block reveal reveal-delay-1">
+        <p class="quote-text">
+          "Tugas boleh diulang, semalam boleh begadang, tapi jangan biarkan itu mengikis keyakinanmu bahwa kamu mampu."
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: TERIMA KASIH -->
+<section class="s-thanks">
+  <div class="thanks-header">
+    <div>
+      <p class="section-label reveal" style="color: var(--terracotta);">02 — Terima Kasih</p>
+      <h2 class="thanks-heading reveal reveal-delay-1">
+        Terima Kasih,<br><em>Tata.</em>
+      </h2>
+    </div>
+    <p class="thanks-intro reveal reveal-delay-2">
+      Kehadiranmu, semangatmu, dan kepercayaanmu — semuanya berarti lebih dari yang bisa diungkapkan kata-kata.
+    </p>
+  </div>
+  <div class="thanks-cards">
+    <div class="thanks-card reveal">
+      <span class="tc-num">01</span>
+      <svg class="tc-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6C18 6 8 12 8 20C8 25.523 12.477 30 18 30C23.523 30 28 25.523 28 20C28 12 18 6 18 6Z" stroke="#C9553A" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      <h3 class="tc-title">Atas Ketulusanmu</h3>
+      <p class="tc-body">Terima kasih karena selalu hadir dengan hati yang tulus. Kamu tidak pernah setengah-setengah dalam menjalani segala hal — dan itu adalah keindahan yang jarang ada pada seseorang.</p>
+    </div>
+    <div class="thanks-card reveal reveal-delay-1">
+      <span class="tc-num">02</span>
+      <svg class="tc-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 18L18 6L30 18" stroke="#C9553A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18 6V30" stroke="#C9553A" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <h3 class="tc-title">Atas Keberanianmu</h3>
+      <p class="tc-body">Terima kasih telah memilih untuk terus bangkit, meski keadaan tidak selalu berpihak. Mengerjakan ulang tugas semalam suntuk tanpa menyerah — itu bukan hal kecil. Itu keberanian yang luar biasa.</p>
+    </div>
+    <div class="thanks-card reveal reveal-delay-2">
+      <span class="tc-num">03</span>
+      <svg class="tc-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="11" stroke="#C9553A" stroke-width="1.5"/>
+        <path d="M18 13V19L22 21" stroke="#C9553A" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <h3 class="tc-title">Atas Kepercayaanmu</h3>
+      <p class="tc-body">Terima kasih sudah mau berbagi cerita, sudah percaya ada tempat untuk bercerita. Kepercayaan itu adalah sesuatu yang aku jaga sepenuh hati, dan tidak akan pernah aku sia-siakan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: DUKUNGAN -->
+<section class="s-support" style="padding: 8rem 6rem;">
+  <div class="support-layout">
+    <div>
+      <p class="support-eyebrow reveal">03 — Dukungan</p>
+      <h2 class="support-heading reveal reveal-delay-1">
+        <span>dan ingat selalu,</span>
+        Kamu Tidak Sendiri
+      </h2>
+      <p class="support-body reveal reveal-delay-1">
+        Menangis bukan tanda kelemahan, Tata. Menangis adalah cara paling jujur yang dipunya manusia untuk bercerita — ketika mulut tidak lagi mampu, maka mata yang akan bercerita melalui air mata. Itu manusiawi. Itu normal.
+      </p>
+      <p class="support-body reveal reveal-delay-2">
+        Kamu sudah sangat mandiri, sudah sangat berani. Dan di balik semua kemandirian itu, ada aku yang selalu ingin memastikan kamu tidak menanggung semuanya sendiri. Tidak ada puncak capek yang harus kamu daki sendirian.
+      </p>
+      <div class="support-promise reveal reveal-delay-2">
+        <p>
+          "Kalau tidak ada seorang pun yang mengerti kamu, ada aku — yang akan selalu berusaha membersamaimu, dan siap menjadi pendengar untuk setiap ceritamu, kapan pun kamu butuhkan."
+        </p>
+      </div>
+    </div>
+    <div class="support-right reveal reveal-delay-1">
+      <div class="art-circle-stack">
+        <div class="acs-ring"></div>
+        <div class="acs-ring"></div>
+        <div class="acs-ring"></div>
+        <div class="acs-center">
+          <strong>Tata ♡</strong>
+          <p>Kamu hebat<br>dan luar biasa</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div>
+    <p class="footer-msg reveal">
+      Semangat <span>terus,</span><br>Tataa.
+    </p>
+  </div>
+  <div class="footer-right reveal">
+    <p class="footer-from">Dengan sepenuh hati, dari</p>
+    <p class="footer-name">Muhammad Reza</p>
+  </div>
+  <div class="footer-art">
+    <p>Oktaviani Asri · 2025</p>
+    <div class="footer-dots">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    if (cursor) { cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; }
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    if (ring) { ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; }
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
